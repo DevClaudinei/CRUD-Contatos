@@ -1,0 +1,85 @@
+<div class="container p-5" *ngIf="tableVisibility">
+  <div class="border boder-light rounded p-5">
+    <button type="button" class="btn btn-sm btn-secondary" (click)="displayRegistrationForm()">
+      New Person
+    </button>
+
+    <hr>
+
+    <table class="table table-striped table-hover table-sm" *ngIf="persons">
+      <tr class="thead-light">
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Age</th>
+        <th>Profession</th>
+        <th>Actions</th>
+      </tr>
+
+      <tr *ngFor="let person of persons">
+        <td>{{ person.firstName }}</td>
+        <td>{{ person.lastName }}</td>
+        <td>{{ person.age }}</td>
+        <td>{{ person.profession }}</td>
+        <td>
+          <button type="button" class="btn btn-sm btn-outline-info" (click)="DisplayUpdateForm(person.id ?? 0)">Update</button> |
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="ShowDeleteConfirmation(person.id ?? 0, person.firstName, modalContent)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="container p-5" *ngIf="formVisibility">
+    <div class="row">
+        <div class="col-6 border boder-light rounded p-5 shadow" *ngIf="form">
+            <h6>{{ form_title }}</h6>
+            <hr>
+            <form [formGroup]="form" (ngSubmit)="SaveForm()">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="firstName">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="lastName">
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" class="form-control form-control-sm" formControlName="age">
+                </div>
+                <div class="form-group">
+                    <label>Profession</label>
+                    <input type="text" class="form-control form-control-sm" formControlName="profession">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                Save
+                            </button>
+                        </div>
+                        <div class="col-auto pl-1">
+                            <button type="button" class="btn btn-sm btn-light" (click)="GoBack()">Back</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<ng-template #modalContent>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Excluded Confirmation</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Do you want to proceed with the deletion of {{ personName }}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modalRef?.hide()">No</button>
+    <button type="button" class="btn btn-outline-danger" data-dismiss="modal" (click)="DeletePerson(personId)">Yes</button>
+  </div>
+</ng-template>
